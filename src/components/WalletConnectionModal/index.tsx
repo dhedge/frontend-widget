@@ -35,6 +35,7 @@ const WalletConnectionModal: React.FC = () => {
       setConnectModalOpen(false);
     }
   }, [active, connectModalOpen, setConnectModalOpen]);
+
   return (
     <ConnectModal
       className={`${
@@ -57,7 +58,9 @@ const WalletConnectionModal: React.FC = () => {
               className="h-32 w-32 mx-10 mb-2"
               src={metamask}
             />
-            <div className="text-white font-semibold">MetaMask</div>
+            <div className="text-white font-semibold text-center p-2">
+              MetaMask
+            </div>
           </div>
           <div
             className="hover:bg-black cursor-pointer rounded-3xl p-2"
@@ -68,7 +71,9 @@ const WalletConnectionModal: React.FC = () => {
               className="h-32 w-32 mx-10 mb-2"
               src={WalletConnectCircleWhite}
             />
-            <div className="text-white font-semibold">WalletConnect</div>
+            <div className="text-white font-semibold text-center p-2">
+              WalletConnect
+            </div>
           </div>
         </div>
       </div>

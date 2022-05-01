@@ -21,3 +21,21 @@ export const fetchTokenPriceHistory = async (
   const { data } = await axiosClient.post("", { query: payload });
   return data;
 };
+
+export const fetchFundComposition = async (fundAddress: string) => {
+  const payload = `
+  query{
+    fund(address:"${fundAddress}"){
+      id
+      fundComposition{
+        id
+        tokenName
+        amount
+        isDeposit
+      }
+    }
+  }
+  `;
+  const { data } = await axiosClient.post("", { query: payload });
+  return data;
+};

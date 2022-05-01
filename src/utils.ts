@@ -1,3 +1,4 @@
+import { ethers } from "ethers";
 import moment from "moment";
 
 export const preparePerfomanceHistoryData = (performanceHistoryData: any) => {
@@ -13,4 +14,8 @@ export const preparePerfomanceHistoryData = (performanceHistoryData: any) => {
     performanceHistory.push(performanceHistoryObject);
   });
   return performanceHistory;
+};
+
+export const fromDecimal = (amount: number) => {
+  return ethers.utils.parseUnits(amount.toString(), 18).toNumber();
 };

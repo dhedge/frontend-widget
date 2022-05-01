@@ -1,45 +1,62 @@
-import React, { useEffect, useCallback, useState } from "react";
+import React, { useEffect, useCallback, useState, useContext } from "react";
 import { Area, AreaChart, ResponsiveContainer, Tooltip } from "recharts";
 
 import { fetchTokenPriceHistory } from "../../api";
 import { preparePerfomanceHistoryData } from "../../utils";
+import PerformanceHistoryTabs from "../PerformanceHistoryTabs";
+import { PerformanceHistoryTabsContext } from "../../context";
 
 const WidgetChart: React.FC = () => {
   const [performanceData, setPerformanceData] = useState<any[]>([]);
+  const [tabIndex, _] = useContext(PerformanceHistoryTabsContext);
+  const [loading, setLoading] = useState<boolean>(true);
 
   const getPerformanceData = useCallback(async () => {
-    const requestData = await fetchTokenPriceHistory(
-      "0x600971E265947678088D18891c02813a1DbaA3e2",
-      "3m"
-    );
-    setPerformanceData(
-      preparePerfomanceHistoryData(requestData.data.tokenPriceHistory.history)
-    );
-  }, []);
+    try {
+      setLoading(true);
+      const requestData = await fetchTokenPriceHistory(
+        "0x2fbD33F07d414bE3e3e112916504b9bdc5617b69",
+        `${tabIndex}`
+      );
+      setPerformanceData(
+        preparePerfomanceHistoryData(requestData.data.tokenPriceHistory.history)
+      );
+      setLoading(false);
+    } catch (e) {
+      setLoading(true);
+    }
+  }, [tabIndex]);
 
   useEffect(() => {
     getPerformanceData();
   }, [getPerformanceData]);
 
   return (
-    <div className="bg-black-dark my-20">
-      <ResponsiveContainer className="w-1/2" height={300}>
-        <AreaChart data={performanceData} height={250}>
-          <defs>
-            <linearGradient id="colorUv" x1="0" x2="0" y1="0" y2="1">
-              <stop offset="5%" stopColor="#00a0d0" stopOpacity={0.8} />
-              <stop offset="95%" stopColor="#00a0d0" stopOpacity={0} />
-            </linearGradient>
-          </defs>
-          <Tooltip content={<WidgetTooltip />} />
-          <Area
-            dataKey="performance"
-            fill="url(#colorUv)"
-            fillOpacity={1}
-            stroke="#00a0d0"
-          />
-        </AreaChart>
-      </ResponsiveContainer>
+    <div className="mt-28 bg-black-dark rounded-2xl flex-col flex">
+      <div>
+        <PerformanceHistoryTabs />
+      </div>
+      <div className={`${loading ? `blur filter` : null}`}>
+        <ResponsiveContainer className="mt-5" height={500}>
+          <AreaChart data={performanceData} height={450}>
+            <defs>
+              <linearGradient id="colorUv" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="5%" stopColor="#00a0d0" stopOpacity={0.8} />
+                <stop offset="95%" stopColor="#00a0d0" stopOpacity={0} />
+              </linearGradient>
+            </defs>
+            <Tooltip content={<WidgetTooltip />} />
+            <Area
+              className="cursor-pointer"
+              dataKey="performance"
+              fill="url(#colorUv)"
+              fillOpacity={1}
+              stroke="#00a0d0"
+              strokeWidth={3}
+            />
+          </AreaChart>
+        </ResponsiveContainer>
+      </div>
     </div>
   );
 };

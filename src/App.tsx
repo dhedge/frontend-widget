@@ -3,12 +3,12 @@ import { Web3ReactProvider } from "@web3-react/core";
 import { ethers } from "ethers";
 import { Provider } from "urql";
 
-import Header from "./components/Header";
 import "./App.css";
-import { ConnectModalContext } from "./context";
+import { ConnectModalContext, PerformanceHistoryTabsContext } from "./context";
 import WalletConnectionModal from "./components/WalletConnectionModal";
 import { urqlClient } from "./graph";
-import WidgetChart from "./components/Chart";
+import BaseLayout from "./components/BaseLayout";
+import Header from "./components/Header";
 
 const App: React.FC = () => {
   const getLibrary = (provider: any): ethers.providers.Web3Provider => {
@@ -17,23 +17,25 @@ const App: React.FC = () => {
     return library;
   };
   const [connectModalOpen, setConnectModalOpen] = useState<boolean>(false);
-
+  const [tabIndex, setTabIndex] = useState<string>("1m");
   return (
-    <div>
+    <>
       <Web3ReactProvider getLibrary={getLibrary}>
         <Provider value={urqlClient}>
           <ConnectModalContext.Provider
             value={[connectModalOpen, setConnectModalOpen]}
           >
-            <div className="App">
+            <PerformanceHistoryTabsContext.Provider
+              value={[tabIndex, setTabIndex]}
+            >
               <Header />
+              <BaseLayout />
               <WalletConnectionModal />
-              <WidgetChart />
-            </div>
+            </PerformanceHistoryTabsContext.Provider>
           </ConnectModalContext.Provider>
         </Provider>
       </Web3ReactProvider>
-    </div>
+    </>
   );
 };
 
