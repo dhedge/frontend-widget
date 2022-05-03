@@ -4,11 +4,16 @@ import { ethers } from "ethers";
 import { Provider } from "urql";
 
 import "./App.css";
-import { ConnectModalContext, PerformanceHistoryTabsContext } from "./context";
+import {
+  ConnectModalContext,
+  PerformanceHistoryTabsContext,
+  InvestModalContext,
+  FundCompositionContext,
+} from "./context";
 import WalletConnectionModal from "./components/WalletConnectionModal";
 import { urqlClient } from "./graph";
 import BaseLayout from "./components/BaseLayout";
-import Header from "./components/Header";
+import InvestModal from "./components/InvestModal";
 
 const App: React.FC = () => {
   const getLibrary = (provider: any): ethers.providers.Web3Provider => {
@@ -16,8 +21,12 @@ const App: React.FC = () => {
     library.pollingInterval = 12000;
     return library;
   };
+
   const [connectModalOpen, setConnectModalOpen] = useState<boolean>(false);
   const [tabIndex, setTabIndex] = useState<string>("1m");
+  const [investModalOpen, setInvestModalOpen] = useState<boolean>(false);
+  const [depositAssets, setDepositAssets] = useState([]);
+
   return (
     <>
       <Web3ReactProvider getLibrary={getLibrary}>
@@ -28,9 +37,17 @@ const App: React.FC = () => {
             <PerformanceHistoryTabsContext.Provider
               value={[tabIndex, setTabIndex]}
             >
-              <Header />
-              <BaseLayout />
-              <WalletConnectionModal />
+              <InvestModalContext.Provider
+                value={[investModalOpen, setInvestModalOpen]}
+              >
+                <FundCompositionContext.Provider
+                  value={[depositAssets, setDepositAssets]}
+                >
+                  <BaseLayout />
+                  <WalletConnectionModal />
+                  <InvestModal />
+                </FundCompositionContext.Provider>
+              </InvestModalContext.Provider>
             </PerformanceHistoryTabsContext.Provider>
           </ConnectModalContext.Provider>
         </Provider>

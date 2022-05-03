@@ -15,3 +15,27 @@ export const getPoolInfo = (fundAddress: string | undefined | null) => {
   `;
   return query;
 };
+
+export const getDeposits = (fundAddress: string | undefined | null) => {
+  const query = `
+  query{
+    deposits(where:{fundAddress:"${fundAddress}"}){
+      uniqueInvestor{
+        id
+      }
+    }
+  }
+  `;
+  return query;
+};
+
+export const getWithdrawals = (fundAddress: string | undefined | null) => {
+  const query = `query{
+    withdrawals(where:{fundAddress:"${fundAddress}"}){
+      uniqueInvestor{
+        id
+      }
+    }
+  }`;
+  return query;
+};

@@ -32,6 +32,9 @@ export const fetchFundComposition = async (fundAddress: string) => {
         tokenName
         amount
         isDeposit
+        precision
+        rate
+        tokenAddress
       }
     }
   }

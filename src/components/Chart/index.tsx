@@ -15,7 +15,7 @@ const WidgetChart: React.FC = () => {
     try {
       setLoading(true);
       const requestData = await fetchTokenPriceHistory(
-        "0x2fbD33F07d414bE3e3e112916504b9bdc5617b69",
+        "0x3a52997c75f721f9da269f90e23be4a4fdb94910",
         `${tabIndex}`
       );
       setPerformanceData(
@@ -32,7 +32,7 @@ const WidgetChart: React.FC = () => {
   }, [getPerformanceData]);
 
   return (
-    <div className="mt-28 bg-black-dark rounded-2xl flex-col flex">
+    <div className="bg-black-dark rounded-2xl flex-col flex">
       <div>
         <PerformanceHistoryTabs />
       </div>

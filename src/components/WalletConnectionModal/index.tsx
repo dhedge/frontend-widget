@@ -92,7 +92,9 @@ const ConnectModal = styled.div`
   background-color: rgb(0, 0, 0); /* Fallback color */
   background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
 `;
+
 const StyledClose = styled(AiOutlineClose)`
   color: grey;
 `;
+
 export default WalletConnectionModal;

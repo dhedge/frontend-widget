@@ -1,21 +1,58 @@
-import styled from "@emotion/styled";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useQuery } from "urql";
-import { getPoolInfo } from "../../graph";
+import styled from "@emotion/styled";
+
+import { getPoolInfo, getDeposits, getWithdrawals } from "../../graph";
+import { fetchFundComposition } from "../../api";
+import { computeValueManaged, computeUniqueInvestors } from "../../utils";
 
 const Banner: React.FC = () => {
   const [manager, setManager] = useState<any>({});
+  const [valueManaged, setValueManaged] = useState<string>("");
+  const [uniqueInvestors, setUniqueInvestors] = useState<number>(0);
 
   const [result] = useQuery({
-    query: getPoolInfo("0x2fbD33F07d414bE3e3e112916504b9bdc5617b69"),
+    query: getPoolInfo("0x3a52997c75f721f9da269f90e23be4a4fdb94910"),
   });
+
+  const [depositsResult] = useQuery({
+    query: getDeposits("0x3a52997c75f721f9da269f90e23be4a4fdb94910"),
+  });
+  const [withdrawalsResult] = useQuery({
+    query: getWithdrawals("0x3a52997c75f721f9da269f90e23be4a4fdb94910"),
+  });
+
   const { data, fetching } = result;
+  const { data: depositsData, fetching: depositsFetching } = depositsResult;
+  const { data: withdrawalsData, fetching: withdrawalsFetching } =
+    withdrawalsResult;
+
+  useEffect(() => {
+    if (depositsFetching && withdrawalsFetching) return;
+    setUniqueInvestors(
+      computeUniqueInvestors(
+        depositsData?.deposits,
+        withdrawalsData?.withdrawals
+      )
+    );
+  }, [depositsData, depositsFetching, withdrawalsData, withdrawalsFetching]);
+
+  const getValueManaged = useCallback(async () => {
+    const response = await fetchFundComposition(
+      "0x3a52997c75f721f9da269f90e23be4a4fdb94910"
+    );
+    setValueManaged(computeValueManaged(response.data.fund.fundComposition));
+  }, []);
 
   useEffect(() => {
     if (fetching) return;
 
     setManager(data?.pools[0]);
   }, [fetching, manager, data?.pools, data]);
+
+  useEffect(() => {
+    getValueManaged();
+  }, [getValueManaged]);
 
   return (
     <div className="p-10 grid grid-cols-2 gap-8">
@@ -46,11 +83,15 @@ const Banner: React.FC = () => {
           </div>
           <div className="px-3">
             <p className="text-grey text-xl">Value Managed</p>
-            <p className="text-2xl font-semibold mt-1 text-white">$</p>
+            <p className="text-2xl font-semibold mt-1 text-white">
+              $ {valueManaged}
+            </p>
           </div>
           <div className="px-3">
             <p className="text-grey text-xl">Unique Investors</p>
-            <p className="text-2xl font-semibold mt-1 text-white">17</p>
+            <p className="text-2xl font-semibold mt-1 text-white">
+              {uniqueInvestors}
+            </p>
           </div>
         </div>
       </div>

@@ -2,11 +2,13 @@ import React from "react";
 import Banner from "../Banner";
 
 import WidgetChart from "../Chart";
+import Header from "../Header";
 import PoolInfo from "../PoolInfo";
 
 const BaseLayout: React.FC = () => {
   return (
     <div className="bg-black m-32">
+      <Header />
       <div>
         <Banner />
       </div>
