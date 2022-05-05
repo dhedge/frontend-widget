@@ -36,9 +36,21 @@ export const fetchFundComposition = async (fundAddress: string) => {
         rate
         tokenAddress
       }
+      managerLogicAddress
+      isPrivate
     }
   }
   `;
+  const { data } = await axiosClient.post("", { query: payload });
+  return data;
+};
+
+export const fetchTokenPrice = async (fundAddress: string) => {
+  const payload = `query{
+    fund(address:"${fundAddress}"){
+      tokenPrice
+    }
+  }`;
   const { data } = await axiosClient.post("", { query: payload });
   return data;
 };

@@ -38,3 +38,12 @@ export const computeUniqueInvestors = (deposits: any, withdrawals: any) => {
 
   return 0;
 };
+
+export const computeConversion = (
+  rateA: number,
+  rateB: number,
+  amountA: number,
+  precision: number
+) => {
+  return (rateA * amountA) / rateB;
+};

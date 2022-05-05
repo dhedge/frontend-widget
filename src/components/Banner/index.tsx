@@ -1,25 +1,28 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useContext } from "react";
 import { useQuery } from "urql";
 import styled from "@emotion/styled";
 
 import { getPoolInfo, getDeposits, getWithdrawals } from "../../graph";
 import { fetchFundComposition } from "../../api";
 import { computeValueManaged, computeUniqueInvestors } from "../../utils";
+import { PoolAddressContext } from "../../context";
 
 const Banner: React.FC = () => {
+  const poolAddress = useContext(PoolAddressContext);
+  console.log({ poolAddress });
   const [manager, setManager] = useState<any>({});
   const [valueManaged, setValueManaged] = useState<string>("");
   const [uniqueInvestors, setUniqueInvestors] = useState<number>(0);
 
   const [result] = useQuery({
-    query: getPoolInfo("0x3a52997c75f721f9da269f90e23be4a4fdb94910"),
+    query: getPoolInfo(poolAddress),
   });
 
   const [depositsResult] = useQuery({
-    query: getDeposits("0x3a52997c75f721f9da269f90e23be4a4fdb94910"),
+    query: getDeposits(poolAddress),
   });
   const [withdrawalsResult] = useQuery({
-    query: getWithdrawals("0x3a52997c75f721f9da269f90e23be4a4fdb94910"),
+    query: getWithdrawals(poolAddress),
   });
 
   const { data, fetching } = result;
@@ -38,9 +41,7 @@ const Banner: React.FC = () => {
   }, [depositsData, depositsFetching, withdrawalsData, withdrawalsFetching]);
 
   const getValueManaged = useCallback(async () => {
-    const response = await fetchFundComposition(
-      "0x3a52997c75f721f9da269f90e23be4a4fdb94910"
-    );
+    const response = await fetchFundComposition(poolAddress);
     setValueManaged(computeValueManaged(response.data.fund.fundComposition));
   }, []);
 

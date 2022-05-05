@@ -4,18 +4,22 @@ import { Area, AreaChart, ResponsiveContainer, Tooltip } from "recharts";
 import { fetchTokenPriceHistory } from "../../api";
 import { preparePerfomanceHistoryData } from "../../utils";
 import PerformanceHistoryTabs from "../PerformanceHistoryTabs";
-import { PerformanceHistoryTabsContext } from "../../context";
+import {
+  PerformanceHistoryTabsContext,
+  PoolAddressContext,
+} from "../../context";
 
 const WidgetChart: React.FC = () => {
   const [performanceData, setPerformanceData] = useState<any[]>([]);
   const [tabIndex, _] = useContext(PerformanceHistoryTabsContext);
+  const poolAddress = useContext(PoolAddressContext);
   const [loading, setLoading] = useState<boolean>(true);
 
   const getPerformanceData = useCallback(async () => {
     try {
       setLoading(true);
       const requestData = await fetchTokenPriceHistory(
-        "0x3a52997c75f721f9da269f90e23be4a4fdb94910",
+        poolAddress,
         `${tabIndex}`
       );
       setPerformanceData(
