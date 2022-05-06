@@ -38,7 +38,7 @@ const PoolInfo: React.FC = () => {
     setDepositAssets(response.data.fund.fundComposition);
     setManagerAddress(response.data.fund.managerLogicAddress);
     setIsPrivate(response.data.fund.isPrivate);
-  }, [setDepositAssets]);
+  }, [poolAddress, setDepositAssets]);
 
   useEffect(() => {
     getFundComposition();
@@ -52,7 +52,7 @@ const PoolInfo: React.FC = () => {
 
   const contract = useMemo(() => {
     return new Contract(poolAddress, PoolLogicAbi);
-  }, []);
+  }, [poolAddress]);
 
   const fetchMembership = useCallback(async () => {
     if (library && account && poolManagerContract && isPrivate) {

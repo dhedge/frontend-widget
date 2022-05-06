@@ -45,7 +45,7 @@ const WalletConnectionModal: React.FC = () => {
       <div className="m-auto bg-black-medium">
         <div className="float-right p-5">
           <button onClick={closeModal}>
-            <StyledClose className="h-10 w-10 bg-grey" />
+            <StyledClose className="h-10 w-10" />
           </button>
         </div>
         <div className="flex flex-row p-20">

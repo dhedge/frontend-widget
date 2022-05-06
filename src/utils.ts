@@ -47,3 +47,7 @@ export const computeConversion = (
 ) => {
   return (rateA * amountA) / rateB;
 };
+
+export const computeReturns = (tokenPrice: number) => {
+  return Math.abs(1.0 - fromDecimal(tokenPrice, 18)) / 100;
+};

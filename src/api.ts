@@ -54,3 +54,16 @@ export const fetchTokenPrice = async (fundAddress: string) => {
   const { data } = await axiosClient.post("", { query: payload });
   return data;
 };
+
+export const fetchUniqueInvestors = async (fundAddress: string) => {
+  const payload = `
+  query{
+    allInvestmentsByFund(fund:"${fundAddress}"){
+      investorAddress
+      investorBalance
+    }
+  }
+  `;
+  const { data } = await axiosClient.post("", { query: payload });
+  return data;
+};

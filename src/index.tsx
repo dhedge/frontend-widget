@@ -9,7 +9,7 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <DHedgeWidget poolAddress={"0x56d195b91000369267f5c3bcc9d00b275bf20d85"} />
+    <DHedgeWidget poolAddress={"0xe9b623b129e6557a1a540f8857db28c4ba043a5a"} />
   </React.StrictMode>
 );
 export { DHedgeWidget };

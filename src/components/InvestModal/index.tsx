@@ -58,7 +58,7 @@ const InvestModal: React.FC = () => {
 
   const poolContract = useMemo(() => {
     return new Contract(poolAddress, PoolLogicAbi);
-  }, []);
+  }, [poolAddress]);
 
   const fetchPoolTokenDetails = useCallback(async () => {
     if (account && library) {
@@ -80,7 +80,7 @@ const InvestModal: React.FC = () => {
   const fetchPoolTokenPrice = useCallback(async () => {
     const response = await fetchTokenPrice(poolAddress);
     setTokenPrice(fromDecimal(response.data.fund.tokenPrice, 18));
-  }, []);
+  }, [poolAddress]);
 
   useEffect(() => {
     fetchPoolTokenPrice();
@@ -96,10 +96,9 @@ const InvestModal: React.FC = () => {
       const index = depositAssets.findIndex((asset: any) => {
         return asset.tokenName === selectedToken;
       });
-      const rate = fromDecimal(
-        BigNumber.from(depositAssets[index].rate),
-        depositAssets[index].precision
-      );
+
+      const rate = fromDecimal(BigNumber.from(depositAssets[index].rate), 18);
+
       setPoolTokens(
         computeConversion(
           rate,
@@ -132,7 +131,14 @@ const InvestModal: React.FC = () => {
         depositAmount < fromDecimal(userAllowance, selectedTokenPrecision)
       );
     }
-  }, [account, depositAmount, library, selectedTokenPrecision, tokenContract]);
+  }, [
+    account,
+    depositAmount,
+    library,
+    poolAddress,
+    selectedTokenPrecision,
+    tokenContract,
+  ]);
 
   const handleApprove = async () => {
     if (tokenContract) {

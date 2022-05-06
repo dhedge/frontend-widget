@@ -29,7 +29,7 @@ const WidgetChart: React.FC = () => {
     } catch (e) {
       setLoading(true);
     }
-  }, [tabIndex]);
+  }, [poolAddress, tabIndex]);
 
   useEffect(() => {
     getPerformanceData();

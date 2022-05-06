@@ -1,54 +1,49 @@
 import React, { useEffect, useState, useCallback, useContext } from "react";
 import { useQuery } from "urql";
 import styled from "@emotion/styled";
+import Jazzicon, { jsNumberForAddress } from "react-jazzicon";
 
-import { getPoolInfo, getDeposits, getWithdrawals } from "../../graph";
-import { fetchFundComposition } from "../../api";
-import { computeValueManaged, computeUniqueInvestors } from "../../utils";
-import { PoolAddressContext } from "../../context";
+import { getPoolInfo } from "../../graph";
+import { fetchFundComposition, fetchUniqueInvestors } from "../../api";
+import { computeValueManaged, computeReturns } from "../../utils";
+import { AvatarContext, PoolAddressContext } from "../../context";
 
 const Banner: React.FC = () => {
   const poolAddress = useContext(PoolAddressContext);
-  console.log({ poolAddress });
+  const avatar = useContext(AvatarContext);
+
   const [manager, setManager] = useState<any>({});
   const [valueManaged, setValueManaged] = useState<string>("");
   const [uniqueInvestors, setUniqueInvestors] = useState<number>(0);
+  const [returns, setReturns] = useState<number>(0);
 
   const [result] = useQuery({
     query: getPoolInfo(poolAddress),
   });
 
-  const [depositsResult] = useQuery({
-    query: getDeposits(poolAddress),
-  });
-  const [withdrawalsResult] = useQuery({
-    query: getWithdrawals(poolAddress),
-  });
-
   const { data, fetching } = result;
-  const { data: depositsData, fetching: depositsFetching } = depositsResult;
-  const { data: withdrawalsData, fetching: withdrawalsFetching } =
-    withdrawalsResult;
-
-  useEffect(() => {
-    if (depositsFetching && withdrawalsFetching) return;
-    setUniqueInvestors(
-      computeUniqueInvestors(
-        depositsData?.deposits,
-        withdrawalsData?.withdrawals
-      )
-    );
-  }, [depositsData, depositsFetching, withdrawalsData, withdrawalsFetching]);
 
   const getValueManaged = useCallback(async () => {
     const response = await fetchFundComposition(poolAddress);
     setValueManaged(computeValueManaged(response.data.fund.fundComposition));
-  }, []);
+  }, [poolAddress]);
+
+  const getUniqueInvestors = useCallback(async () => {
+    const response = await fetchUniqueInvestors(poolAddress);
+    setUniqueInvestors(response.data.allInvestmentsByFund.length);
+  }, [poolAddress]);
+
+  useEffect(() => {
+    getUniqueInvestors();
+  }, [getUniqueInvestors]);
 
   useEffect(() => {
     if (fetching) return;
 
     setManager(data?.pools[0]);
+    setReturns(
+      parseFloat(computeReturns(data?.pools[0].tokenPrice).toFixed(2))
+    );
   }, [fetching, manager, data?.pools, data]);
 
   useEffect(() => {
@@ -58,11 +53,11 @@ const Banner: React.FC = () => {
   return (
     <div className="p-10 grid grid-cols-2 gap-8">
       <div className="flex flex-row gap-6">
-        <img
-          alt="avatar"
-          className="h-40 w-40 rounded-full"
-          src={"https://picsum.photos/200"}
-        />
+        {avatar ? (
+          <img alt="avatar" className="h-40 w-40 rounded-full" src={avatar} />
+        ) : (
+          <Jazzicon diameter={100} seed={jsNumberForAddress(poolAddress)} />
+        )}
         <div>
           <h2 className="text-white text-xl mt-6">
             Managed by{" "}
@@ -80,7 +75,9 @@ const Banner: React.FC = () => {
         <div className="bg-black-dark grid grid-cols-3 p-10 rounded-2xl">
           <div className="px-5">
             <p className="text-grey text-xl">Returns</p>
-            <p className="text-2xl font-semibold mt-1 text-green-500">0.08%</p>
+            <p className="text-2xl font-semibold mt-1 text-green-500">
+              {returns} %
+            </p>
           </div>
           <div className="px-3">
             <p className="text-grey text-xl">Value Managed</p>

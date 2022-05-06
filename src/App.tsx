@@ -10,11 +10,14 @@ import {
   InvestModalContext,
   FundCompositionContext,
   PoolAddressContext,
+  WalletInfoModalContext,
+  AvatarContext,
 } from "./context";
 import WalletConnectionModal from "./components/WalletConnectionModal";
 import { urqlClient } from "./graph";
 import BaseLayout from "./components/BaseLayout";
 import InvestModal from "./components/InvestModal";
+import WalletInfoModal from "./components/WalletInfoModal";
 
 type WidgetProps = {
   poolAddress: string;
@@ -33,31 +36,40 @@ const DHedgeWidget: React.FC<WidgetProps> = (props) => {
   const [tabIndex, setTabIndex] = useState<string>("1m");
   const [investModalOpen, setInvestModalOpen] = useState<boolean>(false);
   const [depositAssets, setDepositAssets] = useState([]);
+  const [walletInfoModalOpen, setWalletInfoModalOpen] =
+    useState<boolean>(false);
 
   return (
     <>
       <Web3ReactProvider getLibrary={getLibrary}>
         <Provider value={urqlClient}>
           <PoolAddressContext.Provider value={poolAddress}>
-            <ConnectModalContext.Provider
-              value={[connectModalOpen, setConnectModalOpen]}
-            >
-              <PerformanceHistoryTabsContext.Provider
-                value={[tabIndex, setTabIndex]}
+            <AvatarContext.Provider value={avatar}>
+              <ConnectModalContext.Provider
+                value={[connectModalOpen, setConnectModalOpen]}
               >
-                <InvestModalContext.Provider
-                  value={[investModalOpen, setInvestModalOpen]}
+                <PerformanceHistoryTabsContext.Provider
+                  value={[tabIndex, setTabIndex]}
                 >
-                  <FundCompositionContext.Provider
-                    value={[depositAssets, setDepositAssets]}
+                  <InvestModalContext.Provider
+                    value={[investModalOpen, setInvestModalOpen]}
                   >
-                    <BaseLayout />
-                    <WalletConnectionModal />
-                    <InvestModal />
-                  </FundCompositionContext.Provider>
-                </InvestModalContext.Provider>
-              </PerformanceHistoryTabsContext.Provider>
-            </ConnectModalContext.Provider>
+                    <FundCompositionContext.Provider
+                      value={[depositAssets, setDepositAssets]}
+                    >
+                      <WalletInfoModalContext.Provider
+                        value={[walletInfoModalOpen, setWalletInfoModalOpen]}
+                      >
+                        <BaseLayout />
+                        <WalletConnectionModal />
+                        <InvestModal />
+                        <WalletInfoModal />
+                      </WalletInfoModalContext.Provider>
+                    </FundCompositionContext.Provider>
+                  </InvestModalContext.Provider>
+                </PerformanceHistoryTabsContext.Provider>
+              </ConnectModalContext.Provider>
+            </AvatarContext.Provider>
           </PoolAddressContext.Provider>
         </Provider>
       </Web3ReactProvider>
