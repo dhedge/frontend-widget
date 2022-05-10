@@ -1,19 +1,20 @@
 {
-	"parser": "@typescript-eslint/parser",
-	"extends": [
-		"eslint:recommended",
-		"plugin:@typescript-eslint/recommended",
-		"react-app",
-		"plugin:prettier/recommended"
-	],
-	"plugins": [
-		"unused-imports"
-	],
-	"rules": {
-		"react/jsx-sort-props": [1, {
-			"shorthandFirst": true,
-			"callbacksLast": true
-		}],
-		"unused-imports/no-unused-imports": "error"
-	}
+  "parser": "@typescript-eslint/parser",
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "react-app",
+    "plugin:prettier/recommended"
+  ],
+  "plugins": ["unused-imports"],
+  "rules": {
+    "react/jsx-sort-props": [
+      1,
+      {
+        "shorthandFirst": true,
+        "callbacksLast": true
+      }
+    ],
+    "unused-imports/no-unused-imports": "error"
+  }
 }
