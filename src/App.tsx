@@ -3,7 +3,6 @@ import { Web3ReactProvider } from "@web3-react/core";
 import { ethers } from "ethers";
 import { Provider } from "urql";
 
-import "./App.css";
 import {
   ConnectModalContext,
   PerformanceHistoryTabsContext,
