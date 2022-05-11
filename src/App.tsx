@@ -32,13 +32,13 @@ const DHedgeWidget: React.FC<WidgetProps> = (props) => {
     useState<boolean>(false);
 
   const web3Provider = () => {
-    if (provider) {
-      return provider;
-    } else if (rpcUrl) {
+    if (rpcUrl && provider) {
       return new ethers.providers.JsonRpcProvider(
-        { url: rpcUrl ? rpcUrl : "" },
+        { url: rpcUrl },
         { chainId: 10, name: "optimism" }
       );
+    } else {
+      return provider;
     }
   };
   return (
