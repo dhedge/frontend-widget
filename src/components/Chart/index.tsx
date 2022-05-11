@@ -11,7 +11,7 @@ import {
 
 const WidgetChart: React.FC = () => {
   const [performanceData, setPerformanceData] = useState<any[]>([]);
-  const [tabIndex, _] = useContext(PerformanceHistoryTabsContext);
+  const [tabIndex] = useContext(PerformanceHistoryTabsContext);
   const poolAddress = useContext(PoolAddressContext);
   const [loading, setLoading] = useState<boolean>(true);
 

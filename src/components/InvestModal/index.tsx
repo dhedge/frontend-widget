@@ -22,7 +22,7 @@ import { fetchTokenPrice } from "../../api";
 
 const InvestModal: React.FC = () => {
   const [investModalOpen, setInvestModalOpen] = useContext(InvestModalContext);
-  const [depositAssets, _] = useContext(FundCompositionContext);
+  const [depositAssets] = useContext(FundCompositionContext);
   const poolAddress = useContext(PoolAddressContext);
 
   const [selectedToken, setSelectedToken] = useState<string>("");

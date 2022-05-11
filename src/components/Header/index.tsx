@@ -4,8 +4,8 @@ import { useWeb3React } from "@web3-react/core";
 import { ConnectModalContext, WalletInfoModalContext } from "../../context";
 
 const Header: React.FC = () => {
-  const [_, setConnectModalOpen] = useContext(ConnectModalContext);
-  const [__, setWalletInfoModalOpen] = useContext(WalletInfoModalContext);
+  const [, setConnectModalOpen] = useContext(ConnectModalContext);
+  const [, setWalletInfoModalOpen] = useContext(WalletInfoModalContext);
 
   const { account } = useWeb3React();
   const address = account?.slice(0, 4) + "...." + account?.slice(38, 42);

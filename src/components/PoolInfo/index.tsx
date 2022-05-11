@@ -28,7 +28,7 @@ const PoolInfo: React.FC = () => {
   const [privatePoolMembership, setPrivatePoolMembership] =
     useState<boolean>(false);
 
-  const [_, setInvestModalOpen] = useContext(InvestModalContext);
+  const [, setInvestModalOpen] = useContext(InvestModalContext);
 
   const { account, library } = useWeb3React();
 
@@ -98,7 +98,7 @@ const PoolInfo: React.FC = () => {
       </div>
       <div className="flex flex-row flex-wrap gap-2">
         {depositAssets
-          .filter((value: any, _: any) => value.isDeposit)
+          .filter((value: any) => value.isDeposit)
           .map((asset: any, idx: any) => (
             <span
               className="col-span-3 bg-blue rounded-xl inline-flex items-center justify-center flex-nowrap rounded-xl px-2.5 py-1"
