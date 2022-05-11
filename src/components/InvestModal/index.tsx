@@ -63,13 +63,13 @@ const InvestModal: React.FC = () => {
   const fetchPoolTokenDetails = useCallback(async () => {
     if (account && library) {
       const tokenName = await poolContract
-        .connect(library.getSigner())
+        .connect(library.getSigner(account))
         .symbol();
       const userBalance = await poolContract
-        .connect(library.getSigner())
+        .connect(library.getSigner(account))
         .balanceOf(account);
       const decimals = await poolContract
-        .connect(library.getSigner())
+        .connect(library.getSigner(account))
         .decimals();
       setTokenDecimals(decimals);
       setPoolTokenName(tokenName);
@@ -119,10 +119,10 @@ const InvestModal: React.FC = () => {
   const fetchUserTokenBalanceAndAllowance = useCallback(async () => {
     if (account && library && tokenContract) {
       const tokenBalance = await tokenContract
-        .connect(library.getSigner())
+        .connect(library.getSigner(account))
         .balanceOf(account);
       const userAllowance = await tokenContract
-        .connect(library.getSigner())
+        .connect(library.getSigner(account))
         .allowance(account, poolAddress);
       setUserTokenBalance(
         parseFloat(fromDecimal(tokenBalance, selectedTokenPrecision).toFixed(6))
@@ -145,7 +145,7 @@ const InvestModal: React.FC = () => {
       const maxAmount =
         "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff";
       const tx = await tokenContract
-        .connect(library.getSigner())
+        .connect(library.getSigner(account))
         .approve(poolAddress, maxAmount);
       await tx.wait();
       fetchUserTokenBalanceAndAllowance();
@@ -162,7 +162,7 @@ const InvestModal: React.FC = () => {
         (asset: any) => asset.tokenName === selectedToken
       );
       const tx = await poolContract
-        .connect(library.getSigner())
+        .connect(library.getSigner(account))
         .deposit(
           selectedTokenAddress,
           ethers.utils.parseUnits(

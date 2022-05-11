@@ -1,6 +1,6 @@
 import React from "react";
-import Banner from "../Banner";
 
+import Banner from "../Banner";
 import WidgetChart from "../Chart";
 import Header from "../Header";
 import PoolInfo from "../PoolInfo";

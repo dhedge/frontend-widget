@@ -57,7 +57,7 @@ const PoolInfo: React.FC = () => {
   const fetchMembership = useCallback(async () => {
     if (library && account && poolManagerContract && isPrivate) {
       const membership = await poolManagerContract
-        .connect(library.getSigner())
+        .connect(library.getSigner(account))
         .isMemberAllowed(account);
       setPrivatePoolMembership(membership);
     }
@@ -70,7 +70,7 @@ const PoolInfo: React.FC = () => {
   const fetchUserBalance = useCallback(async () => {
     if (library && account) {
       const balance = await contract
-        .connect(library.getSigner())
+        .connect(library.getSigner(account))
         .balanceOf(account);
       setUserBalance(parseFloat(fromDecimal(balance, 18).toFixed(1)));
     }
