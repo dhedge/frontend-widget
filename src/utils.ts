@@ -49,5 +49,5 @@ export const computeConversion = (
 };
 
 export const computeReturns = (tokenPrice: number) => {
-  return Math.abs(1.0 - fromDecimal(tokenPrice, 18)) / 100;
+  return ((fromDecimal(tokenPrice, 18) - 1.0) / 1) * 100;
 };

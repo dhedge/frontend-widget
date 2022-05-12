@@ -42,7 +42,7 @@ const Banner: React.FC = () => {
 
     setManager(data?.pools[0]);
     setReturns(
-      parseFloat(computeReturns(data?.pools[0].tokenPrice).toFixed(2))
+      parseFloat(computeReturns(data?.pools[0].tokenPrice).toFixed(3))
     );
   }, [fetching, manager, data?.pools, data]);
 
@@ -75,7 +75,11 @@ const Banner: React.FC = () => {
         <div className="bg-black-dark grid grid-cols-3 p-10 rounded-2xl">
           <div className="px-5">
             <p className="text-grey text-xl">Returns</p>
-            <p className="text-2xl font-semibold mt-1 text-green-500">
+            <p
+              className={`text-2xl font-semibold mt-1 text-${
+                returns > 0 ? "green-500" : `red-500`
+              }`}
+            >
               {returns} %
             </p>
           </div>
