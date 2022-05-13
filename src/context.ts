@@ -11,3 +11,5 @@ export const PoolAddressContext = createContext(null as any);
 export const WalletInfoModalContext = createContext(null as any);
 
 export const AvatarContext = createContext(null as any);
+
+export const ExitModalContext = createContext(null as any);

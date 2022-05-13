@@ -10,11 +10,13 @@ import {
   PoolAddressContext,
   WalletInfoModalContext,
   AvatarContext,
+  ExitModalContext,
 } from "./context";
 import { urqlClient } from "./graph";
 import BaseLayout from "./components/BaseLayout";
 import InvestModal from "./components/InvestModal";
 import WalletInfoModal from "./components/WalletInfoModal";
+import ExitPoolModal from "./components/ExitPoolModal";
 
 type WidgetProps = {
   poolAddress: string;
@@ -27,6 +29,7 @@ const DHedgeWidget: React.FC<WidgetProps> = (props) => {
 
   const [tabIndex, setTabIndex] = useState<string>("1m");
   const [investModalOpen, setInvestModalOpen] = useState<boolean>(false);
+  const [exitModalOpen, setExitModalOpen] = useState<boolean>(false);
   const [depositAssets, setDepositAssets] = useState([]);
   const [walletInfoModalOpen, setWalletInfoModalOpen] =
     useState<boolean>(false);
@@ -59,9 +62,14 @@ const DHedgeWidget: React.FC<WidgetProps> = (props) => {
                     <WalletInfoModalContext.Provider
                       value={[walletInfoModalOpen, setWalletInfoModalOpen]}
                     >
-                      <BaseLayout />
-                      <InvestModal />
-                      <WalletInfoModal />
+                      <ExitModalContext.Provider
+                        value={[exitModalOpen, setExitModalOpen]}
+                      >
+                        <BaseLayout />
+                        <InvestModal />
+                        <WalletInfoModal />
+                        <ExitPoolModal />
+                      </ExitModalContext.Provider>
                     </WalletInfoModalContext.Provider>
                   </FundCompositionContext.Provider>
                 </InvestModalContext.Provider>

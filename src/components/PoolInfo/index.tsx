@@ -13,6 +13,7 @@ import PoolLogicAbi from "../../contracts/PoolLogic.json";
 import PoolManagerLogicAbi from "../../contracts/PoolManagerLogic.json";
 import { fromDecimal } from "../../utils";
 import {
+  ExitModalContext,
   FundCompositionContext,
   InvestModalContext,
   PoolAddressContext,
@@ -21,14 +22,15 @@ import {
 const PoolInfo: React.FC = () => {
   const [depositAssets, setDepositAssets] = useContext(FundCompositionContext);
   const poolAddress = useContext(PoolAddressContext);
-  const [userBalance, setUserBalance] = useState<number>(0);
 
+  const [userBalance, setUserBalance] = useState<number>(0);
   const [isPrivate, setIsPrivate] = useState<boolean>(false);
   const [managerAddress, setManagerAddress] = useState<string>("");
   const [privatePoolMembership, setPrivatePoolMembership] =
     useState<boolean>(false);
 
   const [, setInvestModalOpen] = useContext(InvestModalContext);
+  const [, setExitModalOpen] = useContext(ExitModalContext);
 
   const { account, library } = useWeb3React();
 
@@ -116,6 +118,17 @@ const PoolInfo: React.FC = () => {
           onClick={() => setInvestModalOpen(true)}
         >
           Invest
+        </button>
+      </div>
+      <div className="my-10">
+        <button
+          className={`${
+            userBalance > 0 ? null : "hidden"
+          } text-white bg-opacity-0 secondary-border font-semibold w-full px-6 py-2.5   transition-all rounded-full whitespace-nowrap tracking-wide text-base text-center overflow-ellipsis disabled:cursor-not-allowed disabled:opacity-50 select-none`}
+          type="button"
+          onClick={() => setExitModalOpen(true)}
+        >
+          Withdraw
         </button>
       </div>
     </div>
